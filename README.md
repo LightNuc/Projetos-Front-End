@@ -1,1 +1,1 @@
-Aqui ficarão meus projetos de HTML, CSS e JavaScript, tanto os de pratica quanto os projetos profissionais.
+Aqui ficarão meus projetos pessoais como meu portifolio em HTML, CSS e JavaScript.
