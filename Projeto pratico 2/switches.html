@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Switches — Thock</title>
+<meta name="description" content="Compare switches lineares, táteis e clicky, e entenda qual combina com o seu jeito de digitar.">
+<meta name="theme-color" content="#0f1015">
+<!-- OPEN GRAPH — como o link aparece quando compartilhado no WhatsApp, Discord, redes sociais etc.
+     Troque og:image por uma imagem de verdade (1200x630px) quando tiver uma; por enquanto usa o ícone do site. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Thock">
+<meta property="og:title" content="Switches — Thock">
+<meta property="og:description" content="Compare switches lineares, táteis e clicky, e entenda qual combina com o seu jeito de digitar.">
+<meta property="og:image" content="apple-touch-icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="side-rail left" aria-hidden="true"><div class="rail-track" id="railLeft"></div></div>
+<div class="side-rail right" aria-hidden="true"><div class="rail-track" id="railRight"></div></div>
+
+<header class="site-header">
+  <nav aria-label="Navegação principal">
+    <a class="logo" href="index.html">Thock<span>.</span></a>
+    <!-- classe "active" marca em qual página o visitante está -->
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navPanel">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-right" id="navPanel">
+  <ul class="nav-links">
+    <li><a href="switches.html">Switches</a></li>
+    <li><a href="sounds.html">Sons</a></li>
+    <li><a href="builds.html">Builds</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="login.html" class="nav-account-link">Entrar</a>
+    <a href="cart.html" class="cart-link" aria-label="Ver carrinho">
+      🛒<span class="cart-count" id="cartCount" data-count="0">0</span>
+    </a>
+  </div>
+</div>
+  </nav>
+</header>
+
+<main>
+  <header class="page-hero wrap">
+    <span class="eyebrow">guia de peças</span>
+    <h1>Três formas de sentir uma <em>tecla</em>.</h1>
+    <p>O switch é a peça que decide tudo: o peso do toque, o som, a resposta debaixo do dedo. Abaixo, os três tipos mais comuns — e como escolher entre eles.</p>
+  </header>
+
+  <section id="switches" class="wrap" aria-labelledby="switches-heading">
+    <h2 id="switches-heading" class="sr-only" style="position:absolute;left:-9999px;">Lista de switches</h2>
+    <!-- h2 fora da tela: existe só pra dar estrutura semântica à seção, sem repetir visualmente o título do page-hero -->
+
+    <div class="switch-grid">
+
+      <div class="switch-card">
+        <!-- ESPAÇO PARA IMAGEM: troque por <img class="img-placeholder" src="linear.jpg" alt="Switch linear vermelho"> -->
+        <img class="img-placeholder" src="Linear red.jpeg" alt="Switch linear vermelho">
+        <span class="tag">Linear</span>
+        <h3>Red / Silent</h3>
+        <p>Percurso liso do início ao fim, sem nenhum degrau perceptível. A força sobe de forma constante até o fundo de curso.</p>
+        <ul>
+          <li>Toque mais rápido, sem "trava" no meio do caminho</li>
+          <li>Silencioso ou quase silencioso, dependendo da versão</li>
+          <li>Preferido por quem joga ou digita em ambiente compartilhado</li>
+        </ul>
+        <svg class="curve" viewBox="0 0 200 50"><path d="M0,40 L200,10"/></svg>
+        <span class="price">R$ 49,00 — kit com 10 unidades</span>
+          <button class="btn add-to-cart-btn" type="button" data-id="switch-linear" data-name="Kit Linear — Red / Silent (10 un.)" data-price="49">Adicionar ao carrinho</button>
+      </div>
+
+      <div class="switch-card">
+        <!-- ESPAÇO PARA IMAGEM: troque por <img class="img-placeholder" src="tatil.jpg" alt="Switch tátil marrom"> -->
+        <img class="img-placeholder" src="Tatil brown.jpeg" alt="Switch tátil marrom">
+        <span class="tag">Tátil</span>
+        <h3>Brown / Clear</h3>
+        <p>Uma pequena saliência no meio do percurso avisa o dedo de que a tecla já foi ativada — sem precisar apertar até o fundo.</p>
+        <ul>
+          <li>Bom equilíbrio entre feedback físico e digitação rápida</li>
+          <li>Ruído moderado, mais alto que o linear</li>
+          <li>Ponto de partida clássico pra quem nunca usou mecânico</li>
+        </ul>
+        <svg class="curve" viewBox="0 0 200 50"><path d="M0,40 L70,38 L85,15 L100,30 L200,12"/></svg>
+        <span class="price">R$ 54,00 — kit com 10 unidades</span>
+          <button class="btn add-to-cart-btn" type="button" data-id="switch-tactile" data-name="Kit Tátil — Brown / Clear (10 un.)" data-price="54">Adicionar ao carrinho</button>
+      </div>
+
+      <div class="switch-card">
+        <!-- ESPAÇO PARA IMAGEM: troque por <img class="img-placeholder" src="clicky.jpg" alt="Switch clicky azul"> -->
+        <img class="img-placeholder" src="Clicky blue.jpeg" alt="Switch clicky azul">
+        <span class="tag">Clicky</span>
+        <h3>Blue / Jade</h3>
+        <p>O mesmo degrau tátil do switch anterior, mas com um clique audível embutido no mecanismo — feedback sonoro e físico juntos.</p>
+        <ul>
+          <li>O mais alto dos três, ótimo pra quem gosta do som</li>
+          <li>Feedback muito claro de quando a tecla foi ativada</li>
+          <li>Menos indicado para escritórios compartilhados</li>
+        </ul>
+        <svg class="curve" viewBox="0 0 200 50"><path d="M0,40 L70,38 L82,10 L90,32 L100,30 L200,12"/></svg>
+        <span class="price">R$ 54,00 — kit com 10 unidades</span>
+          <button class="btn add-to-cart-btn" type="button" data-id="switch-clicky" data-name="Kit Clicky — Blue / Jade (10 un.)" data-price="54">Adicionar ao carrinho</button>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="footer-content">
+    <div class="footer-legal">
+      <p>2024–2026 Thock — Montagem de Teclados Mecânicos. Copyright. Todos os direitos reservados.
+         <a href="sobre.html">Sobre</a> — <a href="suporte.html">Suporte</a> — <a href="#">Política de Privacidade</a> — <a href="#">Termos e Condições</a></p>
+      <p class="support-contact">Dúvidas ou problemas? <a href="mailto:suporte@thock.build">suporte@thock.build</a> — resposta em até 2 dias úteis (demonstração).</p>
+    </div>
+    <div class="footer-newsletter">
+      <p>Não perca as próximas builds</p>
+      <form id="newsletterForm" class="newsletter-form" novalidate>
+        <input type="email" id="newsletterEmail" placeholder="seu@email.com">
+        <button class="btn btn-primary" type="submit">Inscrever</button>
+      </form>
+      <p class="newsletter-message" id="newsletterMessage"></p>
+    </div>
+    <div class="footer-bottom-row">
+      <span class="footer-handle">@thock.build</span>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram do Thock">IG</a>
+        <a href="#" aria-label="YouTube do Thock">YT</a>
+        <a href="#" aria-label="Discord da comunidade Thock">DC</a>
+        <a href="#" aria-label="Reddit r/thockbuilds">RD</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="shop.js"></script>
+<script src="rail.js"></script>
+</body>
+</html>

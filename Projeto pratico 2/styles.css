@@ -1,0 +1,1311 @@
+/* ======================================================
+   VARIÁVEIS DE COR
+   Paleta tirada do teu próprio teclado: preto/quase-preto
+   de base, um cinza azulado (a cor real das keycaps) pras
+   superfícies, e o azul elétrico do RGB como destaque
+   principal. O mostarda das teclas especiais (Esc, Enter,
+   setas) vira só um toque secundário, não o protagonista.
+   ====================================================== */
+:root{
+  --bg:#191c24;          /* fundo geral — preto azulado, um pouco mais claro que antes */
+  --surface:#262b38;     /* fundo de cards e caixas elevadas — o cinza azulado das keycaps */
+  --surface-2:#313749;   /* uma camada a mais de profundidade, usada em hover */
+  --text:#eef0f6;        /* texto principal — branco levemente azulado */
+  --text-dim:#8d93a8;    /* texto secundário / parágrafos */
+  --clay:#4d9bff;        /* cor de destaque PRINCIPAL — azul elétrico, igual ao brilho do RGB */
+  --moss:#e0a13f;        /* cor de destaque SECUNDÁRIA — mostarda das teclas especiais, usada com mais moderação */
+  --line:#333a4c;        /* bordas e divisórias */
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'JetBrains Mono', monospace;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+h1,h2,h3{
+  font-family:'Fraunces', serif;
+  font-weight:600;
+  letter-spacing:-0.01em;
+  color:var(--moss); /* tom mostarda/amarelo do teclado nos títulos */
+}
+
+a{ color:inherit; }
+::selection{ background:var(--clay); color:var(--bg); }
+:focus-visible{ outline:2px solid var(--clay); outline-offset:3px; }
+
+.wrap{
+  max-width:1100px;
+  margin:0 auto;
+  padding:0 32px;
+}
+
+/* ======================================================
+   NAV — barra fixa no topo, presente em TODAS as páginas
+   Corrigido: fundo mais opaco e cor de texto fixa, pra não
+   depender só do backdrop-filter (que pode falhar de
+   carregar antes da fonte / em navegadores sem suporte).
+   ====================================================== */
+header.site-header{
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:50;
+  background:#1c1f29;             /* cor sólida de base — sempre visível, mesmo sem blur (atualizada pra combinar com a nova paleta) */
+  background:rgba(28,31,41,0.96); /* opacidade bem alta (quase sólida) por cima da cor sólida acima */
+  backdrop-filter:blur(8px);      /* efeito vidro — só some se o navegador não suportar, mas o fundo acima já resolve */
+  -webkit-backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 32px;
+  max-width:1100px;
+  margin:0 auto;
+  position:relative; /* ancora o painel mobile (.nav-right em telas pequenas) logo abaixo da nav */
+}
+.logo{
+  font-family:'Fraunces', serif;
+  font-weight:700;
+  font-size:1.3rem;
+  letter-spacing:-0.02em;
+  color:var(--moss); /* nome "thock" no tom mostarda/amarelo do teclado */
+  text-decoration:none;
+}
+.logo span{ color:var(--clay); }
+.nav-links{
+  display:flex;
+  gap:28px;
+  list-style:none;
+  font-size:0.9rem;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+}
+/* Agrupa os links do menu + as ações (Entrar/Carrinho) do lado direito da nav,
+   já que agora são dois grupos ao lado do logo, não só um */
+.nav-right{
+  display:flex;
+  align-items:center;
+  gap:32px;
+}
+.nav-actions{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  font-size:0.82rem;
+}
+.nav-account-link{
+  text-decoration:none;
+  color:var(--text-dim);
+  transition:color .2s;
+  white-space:nowrap;
+}
+.nav-account-link:hover{ color:var(--clay); }
+.cart-link{
+  position:relative;
+  display:flex;
+  align-items:center;
+  text-decoration:none;
+  color:var(--text-dim);
+  font-size:1.15rem;
+  transition:color .2s;
+}
+.cart-link:hover{ color:var(--clay); }
+.cart-count{
+  position:absolute;
+  top:-8px; right:-10px;
+  min-width:16px;
+  height:16px;
+  padding:0 4px;
+  border-radius:8px;
+  background:var(--clay);
+  color:var(--bg);
+  font-size:0.62rem;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.cart-count[data-count="0"]{ display:none; } /* esconde a bolinha quando o carrinho está vazio */
+/* Em telas pequenas, .nav-actions passa a ficar dentro do painel mobile (ver mais abaixo) */
+.nav-links a{
+  text-decoration:none;
+  color:var(--text-dim);
+  transition:color .2s;
+  padding-bottom:4px;
+  border-bottom:2px solid transparent; /* reservado para o indicador de página ativa */
+}
+.nav-links a:hover{ color:var(--clay); }
+.nav-links a.active{
+  color:var(--text);
+  border-bottom-color:var(--clay); /* sublinhado sutil indicando em que página você está */
+}
+.nav-links li{ display:list-item; }
+/* ======================================================
+   MENU MOBILE — botão hambúrguer + painel que abre/fecha
+   ====================================================== */
+.nav-toggle{
+  display:none; /* só aparece abaixo de 640px, ver media query no fim deste bloco */
+  flex-direction:column;
+  justify-content:center;
+  gap:5px;
+  width:32px; height:32px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:0;
+}
+.nav-toggle span{
+  width:100%;
+  height:2px;
+  background:var(--text);
+  border-radius:2px;
+  transition:transform .25s, opacity .2s;
+}
+/* Quando aberto, as três barrinhas viram um "X" */
+.nav-toggle.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2){ opacity:0; }
+.nav-toggle.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+@media (max-width:640px){
+  .nav-toggle{ display:flex; } /* mostra o hambúrguer só no mobile */
+
+  .nav-right{
+    display:none; /* painel escondido por padrão no mobile */
+    position:absolute;
+    top:100%; left:0; right:0;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:24px;
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+    padding:24px 32px 32px;
+  }
+  .nav-right.open{ display:flex; } /* JS adiciona essa classe ao clicar no hambúrguer */
+
+  .nav-links{
+    flex-direction:column;
+    gap:18px;
+    width:100%;
+  }
+  .nav-actions{
+    display:flex; /* no desktop essa regra já existe; no mobile também precisa mostrar dentro do painel */
+    flex-direction:column;
+    align-items:flex-start;
+    gap:14px;
+    width:100%;
+  }
+}
+
+/* ======================================================
+   BOTÕES — usados em vários lugares do site
+   ====================================================== */
+.btn{
+  font-family:'JetBrains Mono', monospace;
+  font-size:0.85rem;
+  padding:14px 26px;
+  border-radius:3px;
+  text-decoration:none;
+  display:inline-block;
+  transition:transform .15s, background .15s, color .15s, border-color .15s; /* anima também cor e borda, não só o "levantar" */
+  border:1px solid transparent;
+}
+/* Estado normal: os dois botões agora ficam iguais, no visual original do "Ver builds"
+   (contorno fino, sem preenchimento) */
+.btn-primary, .btn-ghost{
+  background:transparent;
+  border-color:var(--line);
+  color:var(--text);
+}
+
+/* Hover: os dois sobem juntos (mesma animação) e ganham o contorno na cor de destaque */
+.btn-primary:hover, .btn-ghost:hover{
+  transform:translateY(-2px);
+  border-color:var(--clay);
+  color:var(--clay);
+}
+
+/* ======================================================
+   HERO DA HOME — centralizado, com animação de entrada
+   ====================================================== */
+.hero{
+  padding:180px 0 100px;
+  text-align:center;         /* título e texto centralizados, como pedido */
+}
+.hero .eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:0.78rem;
+  text-transform:uppercase;
+  letter-spacing:0.12em;
+  color:var(--moss);
+  margin-bottom:22px;
+}
+.hero .eyebrow::before{
+  content:'';
+  width:8px; height:8px;
+  background:var(--moss);
+  border-radius:1px;
+  display:inline-block;
+}
+.hero h1{
+  font-size:clamp(2.6rem, 6vw, 4.6rem);
+  line-height:1.05;
+  max-width:16ch;
+  margin:0 auto 26px;   /* margin auto centraliza o bloco de texto mesmo com max-width */
+}
+.hero h1 em{ font-style:italic; color:var(--clay); }
+.hero p{
+  max-width:52ch;
+  margin:0 auto 40px;
+  color:var(--text-dim);
+}
+.hero .cta-row{
+  display:flex;
+  gap:16px;
+  justify-content:center;  /* botões centralizados */
+  flex-wrap:wrap;
+}
+
+/* Animação de entrada: cada elemento do hero "sobe e aparece",
+   em sequência (cada um com um pouquinho mais de atraso que o anterior) */
+@keyframes fadeUp{
+  from{ opacity:0; transform:translateY(14px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+.hero .eyebrow{ animation:fadeUp .6s ease both; }
+.hero h1{ animation:fadeUp .6s ease .12s both; }
+.hero p{ animation:fadeUp .6s ease .24s both; }
+.hero .cta-row{ animation:fadeUp .6s ease .36s both; }
+.hero .keycap-demo{ animation:fadeUp .6s ease .48s both; }
+
+/* ======================================================
+   DEMO INTERATIVA DE TECLAS (na home)
+   ====================================================== */
+.keycap-demo{
+  margin:70px auto 0;
+  max-width:520px;              /* centraliza a caixa junto com o resto do hero */
+  padding:36px 28px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:8px;
+}
+.keycap-demo .hint{
+  font-size:0.75rem;
+  color:var(--text-dim);
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  margin-bottom:20px;
+}
+.keys{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+.key{
+  --depress:0px;
+  width:56px; height:56px;
+  background:linear-gradient(180deg, #e6ac52, #c98a2e); /* caixa da tecla na cor mostarda/amarelo do teclado */
+  border:1px solid #b87c28;
+  border-bottom:4px solid #8f5f1a;
+  border-radius:6px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.9rem;
+  color:var(--text); /* letra da tecla em branco, para contrastar com a caixa amarela */
+  cursor:pointer;
+  user-select:none;
+  transform:translateY(var(--depress));
+  transition:transform .06s ease-out, border-bottom-width .06s ease-out, box-shadow .15s;
+  position:relative;
+}
+.key:active, .key.pressed{
+  --depress:3px;
+  border-bottom-width:1px;
+  box-shadow:0 0 0 2px rgba(191,109,67,0.25);
+}
+
+/* ======================================================
+   TRILHOS LATERAIS — teclados em miniatura "passando" nas
+   margens da home, só visíveis em telas largas o suficiente
+   pra sobrar espaço fora da coluna central de 1100px.
+   ====================================================== */
+.side-rail{
+  position:fixed;
+  top:0;
+  height:100vh;
+  width:calc((100vw - 1100px) / 2); /* exatamente o tamanho da margem sobrando de cada lado */
+  display:flex;
+  justify-content:center;
+  overflow:hidden;
+  pointer-events:none; /* não atrapalha cliques no conteúdo real */
+  z-index:0; /* fica atrás do menu (z-index:50) e do conteúdo normal */
+  /* some suavemente no topo e no rodapé, em vez de "cortar" o teclado no meio */
+  -webkit-mask-image:linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+  mask-image:linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+}
+.side-rail.left{ left:0; }
+.side-rail.right{ right:0; }
+
+.rail-track{
+  display:flex;
+  flex-direction:column;
+  gap:48px; /* mais respiro, acompanhando os teclados maiores */
+  animation:railScroll 52s linear infinite; /* mais devagar — tem mais conteúdo rolando agora */
+}
+/* o trilho da direita rola pro lado oposto, só pra não ficarem sincronizados */
+.side-rail.right .rail-track{ animation-direction:reverse; }
+
+@keyframes railScroll{
+  from{ transform:translateY(0); }
+  to{ transform:translateY(-50%); } /* -50% porque o conteúdo é duplicado via JS, criando um loop sem emenda */
+}
+
+.mini-kb{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr); /* mini "teclado" 4x3 */
+  gap:6px;
+  width:108px; /* antes era 72px — bem mais visível agora */
+  padding:12px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:8px;
+  /* opacity e transform (escala) não ficam fixos aqui — o main.js varia esses dois
+     valores um pouco pra cada teclado, pra eles não parecerem todos clones idênticos */
+}
+.mini-key{
+  aspect-ratio:1;
+  background:linear-gradient(180deg, #d99a4a, #b87c2e); /* mesmo tom mostarda das teclas reais */
+  border-radius:3px;
+  animation:miniPress 3.6s ease-in-out infinite;
+  /* o animation-delay de cada tecla agora vem aleatório via JS (inline, no main.js) —
+     as regras nth-child abaixo só ficam de reserva, caso o JavaScript não carregue */
+}
+.mini-key:nth-child(1){ animation-delay:0s; }
+.mini-key:nth-child(2){ animation-delay:.7s; }
+.mini-key:nth-child(3){ animation-delay:1.3s; }
+.mini-key:nth-child(4){ animation-delay:.2s; }
+.mini-key:nth-child(5){ animation-delay:2.1s; }
+.mini-key:nth-child(6){ animation-delay:1s; }
+.mini-key:nth-child(7){ animation-delay:2.6s; }
+.mini-key:nth-child(8){ animation-delay:.5s; }
+.mini-key:nth-child(9){ animation-delay:1.7s; }
+.mini-key:nth-child(10){ animation-delay:2.9s; }
+.mini-key:nth-child(11){ animation-delay:.9s; }
+.mini-key:nth-child(12){ animation-delay:2.2s; }
+
+@keyframes miniPress{
+  0%, 85%, 100%{ transform:translateY(0); opacity:1; }
+  90%{ transform:translateY(2px); opacity:0.65; } /* a tecla "afunda" rapidinho, como se fosse pressionada */
+}
+
+/* Em telas sem espaço sobrando nas laterais, os trilhos somem — não tem onde mostrar.
+   Breakpoint mais alto que antes, porque os teclados agora são maiores e precisam de mais margem. */
+@media (max-width:1500px){
+  .side-rail{ display:none; }
+}
+.key::after{
+  content:'';
+  position:absolute; inset:0;
+  border-radius:6px;
+  background:radial-gradient(circle, rgba(191,109,67,0.35), transparent 70%);
+  opacity:0;
+  transition:opacity .3s;
+  pointer-events:none;
+}
+.key.rippled::after{ opacity:1; animation:ripple .5s ease-out; }
+@keyframes ripple{ from{ opacity:0.7; } to{ opacity:0; transform:scale(1.4); } }
+.typed-out{
+  margin-top:22px;
+  min-height:1.4em;
+  font-size:1.05rem;
+  color:var(--clay);
+  text-align:center;
+}
+.typed-out .cursor{
+  display:inline-block; width:2px; height:1em;
+  background:var(--clay);
+  vertical-align:text-bottom;
+  animation:blink 1s step-end infinite;
+  margin-left:2px;
+}
+@keyframes blink{ 50%{ opacity:0; } }
+
+/* ======================================================
+   SEÇÕES GERAIS (usado em todas as páginas)
+   ====================================================== */
+section{ padding:100px 0; border-top:1px solid var(--line); }
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:24px;
+  margin-bottom:30px;
+  flex-wrap:wrap;
+}
+.section-head h2{ font-size:clamp(1.8rem, 3.4vw, 2.6rem); }
+.section-head p{ color:var(--text-dim); max-width:40ch; font-size:0.92rem; }
+
+/* Cabeçalho simples usado no TOPO das páginas internas (Switches, Sons, Builds) —
+   diferente do .hero da home: não é centralizado, fica logo abaixo do menu fixo */
+.page-hero{
+  padding:170px 0 70px;
+  border-top:none;
+}
+.page-hero .eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:0.78rem; text-transform:uppercase; letter-spacing:0.12em;
+  color:var(--moss); margin-bottom:18px;
+}
+.page-hero .eyebrow::before{
+  content:''; width:8px; height:8px; background:var(--moss);
+  border-radius:1px; display:inline-block;
+}
+.page-hero h1{ font-size:clamp(2.2rem, 5vw, 3.4rem); margin-bottom:18px; }
+.page-hero h1 em{ font-style:italic; color:var(--clay); } /* mesma palavra em destaque azul/itálico da home, aplicada aqui */
+.page-hero p{ color:var(--text-dim); max-width:60ch; }
+
+/* Mesma animação de entrada do hero da home, aplicada aqui pro cabeçalho das páginas internas */
+.page-hero .eyebrow{ animation:fadeUp .6s ease both; }
+.page-hero h1{ animation:fadeUp .6s ease .12s both; }
+.page-hero p{ animation:fadeUp .6s ease .24s both; }
+
+/* ======================================================
+   ESPAÇO RESERVADO PARA IMAGENS — placeholder visual
+   Troque a <div class="img-placeholder"> por uma <img>
+   (mesmas classes de tamanho) assim que tiver as fotos.
+   ====================================================== */
+.img-placeholder{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;              /* preenche toda a largura da caixa (funciona pra <div> e pra <img>) */
+  overflow:hidden;         /* se alguém colocar a <img> DENTRO da div (em vez de substituir), isso corta o excesso */
+  object-fit:cover;        /* só afeta quando a própria caixa é uma <img>: corta a foto sem esticar/distorcer */
+  object-position:center;  /* qual parte da foto fica visível quando algo precisa ser cortado */
+  background:var(--surface-2);
+  border:1px dashed var(--line);
+  border-radius:8px;
+  color:var(--text-dim);
+  font-size:0.72rem;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  text-align:center;
+  padding:12px;
+}
+/* Caso a <img> seja colocada DENTRO do placeholder (em vez de substituir a div),
+   essa regra garante que ela também preencha a caixa certinho */
+.img-placeholder img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+}
+/* Sempre que existir uma FOTO DE VERDADE (seja porque a caixa virou uma <img>, seja porque
+   a <img> foi colocada dentro da div) em QUALQUER lugar do site — galeria, builds ou switches —
+   aplica esse contorno azul, pra dar um acabamento estilizado em vez do "cru" da foto sozinha */
+.img-placeholder:has(img),
+img.img-placeholder{
+  border:2px solid var(--clay);
+}
+/* Proteção extra: se uma <img> acabar recebendo a classe "img-placeholder" enquanto
+   ainda está dentro de uma <div> com a mesma classe (por engano), isso remove o
+   espaçamento interno pensado só pro texto do placeholder, senão a foto fica
+   encolhida pra dentro da borda em vez de preencher a caixa toda */
+img.img-placeholder{
+  padding:0;
+}
+
+/* ======================================================
+   SWITCHES — cards de comparação (home teaser E página switches.html)
+   ====================================================== */
+.switch-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+}
+@media (max-width:800px){ .switch-grid{ grid-template-columns:1fr; } }
+.switch-card{ background:var(--bg); padding:36px 30px; }
+.switch-card .tag{
+  font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em;
+  color:var(--moss); margin-bottom:14px; display:block;
+}
+.switch-card h2, .switch-card h3{ font-size:1.3rem; margin-bottom:10px; }
+.switch-card p{ color:var(--text-dim); font-size:0.92rem; margin-bottom:14px; }
+.switch-card ul{
+  color:var(--text-dim);
+  font-size:0.85rem;
+  padding-left:18px;
+  margin-bottom:18px;
+}
+.switch-card li{ margin-bottom:6px; }
+/* Fotos de switch geralmente vêm com fundo branco (foto de produto/e-commerce).
+   Aqui usamos "contain" (mostra a imagem inteira, sem cortar nada) — o fundo branco
+   e a borda sólida só entram quando JÁ EXISTE uma foto de verdade ali (ver regra
+   ":has(img)" logo abaixo). Enquanto for só o placeholder de texto, continua
+   com a aparência padrão (fundo escuro, borda tracejada) do resto do site. */
+.switch-card .img-placeholder{
+  height:150px;
+  margin-bottom:18px;
+  object-fit:contain; /* usado quando a própria caixa é a <img> */
+}
+.switch-card .img-placeholder img{
+  object-fit:contain; /* mesma lógica, usado quando a <img> está DENTRO da div */
+}
+/* Quando existe uma foto de verdade — seja porque a própria caixa virou uma <img>,
+   seja porque a <img> foi colocada DENTRO da div — troca o visual de "vazio"
+   (fundo escuro, borda tracejada) pro visual de foto (fundo branco, borda fina sólida) */
+.switch-card img.img-placeholder,
+.switch-card .img-placeholder:has(img){
+  background:#ffffff; /* o contorno azul (regra geral acima) continua valendo aqui também */
+}
+.curve{ width:100%; height:44px; }
+.curve path{ fill:none; stroke:var(--clay); stroke-width:2; }
+
+/* ======================================================
+   PÁGINA DE SONS — cards com botão de tocar som sintetizado
+   ====================================================== */
+.sound-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:24px;
+}
+@media (max-width:800px){ .sound-grid{ grid-template-columns:1fr; } }
+.sound-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:30px;
+  text-align:center;
+}
+.sound-card .tag{
+  font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em;
+  color:var(--moss); margin-bottom:10px; display:block;
+}
+.sound-card h2{ font-size:1.25rem; margin-bottom:14px; }
+.sound-card .phrase{
+  color:var(--text-dim);
+  font-style:italic;
+  font-size:0.92rem;
+  margin-bottom:22px;
+  min-height:2.6em;
+}
+.sound-card .waveform-mini{
+  display:flex; align-items:flex-end; justify-content:center;
+  gap:3px; height:40px; margin-bottom:20px;
+}
+.sound-card .waveform-mini .bar{
+  width:4px; background:var(--line); border-radius:2px;
+  transition:background .2s, transform .2s;
+}
+.sound-card .waveform-mini.playing .bar{
+  background:var(--clay);
+  animation:sway .5s ease-in-out infinite;
+}
+@keyframes sway{ 0%,100%{ transform:scaleY(0.3); } 50%{ transform:scaleY(1); } }
+.play-btn{
+  font-family:'JetBrains Mono', monospace;
+  font-size:0.82rem;
+  padding:12px 22px;
+  border-radius:3px;
+  background:transparent;
+  border:1px solid var(--clay);
+  color:var(--clay);
+  cursor:pointer;
+  transition:background .15s, color .15s;
+}
+.play-btn:hover{ background:var(--clay); color:var(--bg); }
+.sound-note{
+  color:var(--text-dim);
+  font-size:0.82rem;
+  margin-top:40px;
+  text-align:center;
+}
+
+/* ======================================================
+   BUILDS — cards de montagens (home teaser E página builds.html)
+   ====================================================== */
+.build-row{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+@media (max-width:800px){ .build-row{ grid-template-columns:1fr; } }
+.build-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:26px;
+}
+.build-card .img-placeholder{ width:100%; height:150px; margin-bottom:18px; }
+.build-card h2, .build-card h3{ font-size:1.1rem; margin-bottom:6px; }
+.build-card p{ color:var(--text-dim); font-size:0.88rem; margin-bottom:12px; }
+.build-card .specs{
+  list-style:none;
+  font-size:0.78rem;
+  color:var(--text-dim);
+  border-top:1px solid var(--line);
+  padding-top:12px;
+}
+.build-card .specs li{ margin-bottom:4px; }
+.build-card .specs b{ color:var(--text); font-weight:600; }
+
+/* ======================================================
+   GALERIA NA HOME — fotos de teclados clicáveis, levam a builds.html
+   ====================================================== */
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:20px;
+}
+@media (max-width:800px){ .gallery-grid{ grid-template-columns:1fr 1fr; } }
+@media (max-width:520px){ .gallery-grid{ grid-template-columns:1fr; } }
+.gallery-item{
+  display:block;
+  text-decoration:none;
+  color:inherit;
+  transition:transform .2s;
+}
+.gallery-item:hover{ transform:translateY(-4px); } /* leve "levantada" ao passar o mouse, indica que é clicável */
+.gallery-item .img-placeholder{
+  height:160px;
+  margin-bottom:12px;
+  transition:border-color .2s;
+}
+.gallery-item:hover .img-placeholder{ border-color:var(--clay); }
+.gallery-item .caption{
+  font-size:0.85rem;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.gallery-item .caption .arrow{
+  color:var(--clay);
+  opacity:0;
+  transition:opacity .2s, transform .2s;
+  transform:translateX(-4px);
+}
+.gallery-item:hover .caption .arrow{ opacity:1; transform:translateX(0); }
+
+/* ======================================================
+   CARDS-GUIA — botões grandes de navegação no fim da home
+   ====================================================== */
+.guide-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:20px;
+}
+@media (max-width:800px){ .guide-grid{ grid-template-columns:1fr; } }
+.guide-card{
+  display:block;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:30px;
+  text-decoration:none;
+  color:inherit;
+  transition:border-color .2s, transform .2s;
+}
+.guide-card:hover{ border-color:var(--clay); transform:translateY(-3px); }
+.guide-card .tag{
+  font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em;
+  color:var(--moss); margin-bottom:10px; display:block;
+}
+.guide-card h3{ font-size:1.2rem; margin-bottom:8px; }
+.guide-card p{ color:var(--text-dim); font-size:0.85rem; }
+.guide-card .go{
+  display:inline-block;
+  margin-top:16px;
+  font-size:0.78rem;
+  color:var(--clay);
+}
+
+/* ======================================================
+   RODAPÉ + REDES SOCIAIS FICTÍCIAS
+   ====================================================== */
+footer{
+  margin-top:120px; /* espaço grande de propósito entre a linha do topo do rodapé e o conteúdo acima (ex: os cards-guia da home) */
+  padding:60px 0 40px;
+  border-top:1px solid var(--line);
+  color:var(--text-dim);
+  font-size:0.82rem;
+}
+/* Bloco de texto legal/institucional, no estilo "rodapé de site de verdade" —
+   agora em DUAS fileiras empilhadas: texto centralizado em cima, e embaixo
+   uma linha com @thock.build na esquerda e os ícones na direita */
+.footer-content{
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+.footer-legal{
+  text-align:center;
+  max-width:640px;
+  margin:0 auto; /* centraliza o bloco de texto na largura toda do rodapé */
+}
+.footer-legal p{
+  font-size:0.78rem;
+  line-height:1.7;
+  margin-bottom:10px;
+}
+.footer-legal a{
+  color:var(--clay);
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.footer-legal .disclaimer{
+  font-size:0.72rem;
+  opacity:0.75; /* levemente mais apagado, é a "letra miúda" */
+  margin-bottom:0;
+}
+footer a{ color:var(--clay); text-decoration:none; }
+
+/* Segunda fileira: @thock.build à esquerda, ícones à direita */
+.footer-bottom-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:16px;
+}
+.footer-handle{
+  color:var(--text-dim);
+  font-size:0.82rem;
+}
+.social-links{
+  display:flex;
+  gap:12px;
+}
+.social-links a{
+  width:38px; height:38px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.68rem;
+  font-weight:700;
+  letter-spacing:0.02em;
+  color:var(--text-dim);
+  transition:border-color .2s, color .2s;
+}
+.social-links a:hover{ border-color:var(--clay); color:var(--clay); }
+
+/* Em telas estreitas, centraliza a segunda fileira também */
+@media (max-width:700px){
+  .footer-bottom-row{ justify-content:center; text-align:center; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+}
+
+/* ======================================================
+   PREÇO + BOTÃO "ADICIONAR AO CARRINHO" — usado nos cards
+   de switches.html e builds.html
+   ====================================================== */
+.price{
+  display:block;
+  color:var(--clay);
+  font-weight:700;
+  font-size:1.05rem;
+  margin:14px 0;
+}
+.add-to-cart-btn{
+  width:100%;
+  text-align:center;
+  font-family:'JetBrains Mono', monospace;
+  font-size:0.82rem;
+  padding:12px 18px;
+  border-radius:4px;
+  border:1px solid var(--clay);
+  background:transparent;
+  color:var(--clay);
+  cursor:pointer;
+  transition:background .15s, color .15s, transform .15s;
+}
+.add-to-cart-btn:hover{ background:var(--clay); color:var(--bg); transform:translateY(-2px); }
+.add-to-cart-btn.added{
+  background:var(--moss);
+  border-color:var(--moss);
+  color:var(--bg);
+} /* feedback rápido de "adicionado", trocado de volta pelo JS depois de 1.2s */
+
+/* ======================================================
+   LOGIN / CADASTRO (login.html)
+   ====================================================== */
+.auth-wrap{
+  min-height:calc(100vh - 60px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:170px 24px 100px;
+}
+.auth-card{
+  width:100%;
+  max-width:420px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:40px 36px;
+}
+.auth-tabs{
+  display:flex;
+  border-bottom:1px solid var(--line);
+  margin-bottom:28px;
+}
+.auth-tab{
+  flex:1;
+  background:none;
+  border:none;
+  padding:10px 0 14px;
+  font-family:'JetBrains Mono', monospace;
+  font-size:0.8rem;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+  color:var(--text-dim);
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:color .2s, border-color .2s;
+}
+.auth-tab.active{ color:var(--clay); border-bottom-color:var(--clay); }
+.auth-form{ display:flex; flex-direction:column; gap:16px; }
+.auth-form[hidden]{ display:none; }
+.form-group{ display:flex; flex-direction:column; gap:6px; }
+.form-group label{
+  font-size:0.75rem;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  color:var(--text-dim);
+}
+.form-group input{
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:5px;
+  padding:11px 12px;
+  color:var(--text);
+  font-family:'JetBrains Mono', monospace;
+  font-size:0.9rem;
+}
+.form-group input:focus{
+  outline:2px solid var(--clay);
+  outline-offset:1px;
+  border-color:var(--clay);
+}
+/* Estado de erro: a borda do campo fica laranja-avermelhada — mesma cor
+   do texto de erro, pra ficar claro que os dois estão ligados */
+.form-group input.invalid{
+  border-color:#e0693f;
+}
+.field-error{
+  color:#e0693f;
+  font-size:0.74rem;
+  min-height:1.1em; /* reserva o espaço mesmo vazio, pra não "pular" o layout quando o erro aparece */
+}
+/* Campo de senha com o botão de olho embutido */
+.password-field{
+  position:relative;
+}
+.password-field input{
+  width:100%;
+  padding-right:44px; /* abre espaço pro botão não ficar em cima do texto digitado */
+}
+.toggle-password{
+  position:absolute;
+  right:6px;
+  top:50%;
+  transform:translateY(-50%);
+  background:none;
+  border:none;
+  color:var(--text-dim);
+  font-size:0.8rem;
+  cursor:pointer;
+  padding:6px 8px;
+}
+.toggle-password:hover{ color:var(--clay); }
+.form-error{
+  color:#e0693f;
+  font-size:0.78rem;
+  min-height:1.1em;
+}
+.auth-submit{ margin-top:6px; }
+.auth-success{
+  color:var(--moss);
+  font-size:0.85rem;
+  text-align:center;
+  margin-top:14px;
+}
+.auth-note{
+  margin-top:26px;
+  font-size:0.74rem;
+  color:var(--text-dim);
+  text-align:center;
+  line-height:1.6;
+}
+
+/* ======================================================
+   CARRINHO (cart.html)
+   ====================================================== */
+.cart-empty{
+  text-align:center;
+  padding:60px 20px;
+  color:var(--text-dim);
+}
+.cart-empty p{ margin-bottom:24px; }
+.cart-layout{
+  display:grid;
+  grid-template-columns:1fr 320px;
+  gap:40px;
+  align-items:start;
+}
+@media (max-width:800px){ .cart-layout{ grid-template-columns:1fr; } }
+
+.cart-list{ display:flex; flex-direction:column; gap:16px; }
+.cart-item{
+  display:grid;
+  grid-template-columns:1fr auto auto auto;
+  align-items:center;
+  gap:18px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:18px 20px;
+}
+@media (max-width:560px){
+  .cart-item{ grid-template-columns:1fr; text-align:left; gap:10px; }
+}
+.cart-item-name{ display:block; font-weight:600; margin-bottom:4px; }
+.cart-item-unit-price{ color:var(--text-dim); font-size:0.82rem; }
+.cart-item-qty{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:4px 6px;
+}
+.qty-btn{
+  width:24px; height:24px;
+  border:none;
+  background:none;
+  color:var(--text);
+  font-size:0.95rem;
+  cursor:pointer;
+  border-radius:4px;
+}
+.qty-btn:hover{ background:var(--surface-2); color:var(--clay); }
+.qty-value{ min-width:16px; text-align:center; font-size:0.88rem; }
+.cart-item-line-total{ font-weight:700; color:var(--clay); min-width:80px; text-align:right; }
+.cart-item-remove{
+  background:none;
+  border:none;
+  color:var(--text-dim);
+  font-size:1rem;
+  cursor:pointer;
+  padding:4px 8px;
+}
+.cart-item-remove:hover{ color:#e0693f; }
+
+.cart-summary{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:26px;
+  position:sticky;
+  top:100px;
+}
+.cart-summary h2{ font-size:1.1rem; margin-bottom:18px; }
+.cart-summary-row{
+  display:flex;
+  justify-content:space-between;
+  font-size:0.88rem;
+  color:var(--text-dim);
+  padding:8px 0;
+}
+.cart-summary-row.total{
+  border-top:1px solid var(--line);
+  margin-top:8px;
+  padding-top:16px;
+  color:var(--text);
+  font-weight:700;
+  font-size:1rem;
+}
+.cart-summary .btn{ width:100%; text-align:center; margin-top:18px; }
+.checkout-message{
+  margin-top:14px;
+  font-size:0.82rem;
+  color:var(--moss);
+  text-align:center;
+}
+
+/* ======================================================
+   CONFIRMAÇÃO DE PEDIDO (order-confirmation.html)
+   ====================================================== */
+.confirmation-wrap{
+  max-width:620px;
+  margin:0 auto;
+  padding:170px 24px 100px;
+  text-align:center;
+}
+.confirmation-icon{
+  width:64px; height:64px;
+  border-radius:50%;
+  background:var(--moss);
+  color:var(--bg);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.8rem;
+  margin:0 auto 24px;
+}
+.confirmation-wrap h1{ margin-bottom:12px; }
+.confirmation-wrap .order-number{
+  display:inline-block;
+  margin:10px 0 28px;
+  padding:8px 18px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  color:var(--clay);
+  font-size:0.9rem;
+  letter-spacing:0.04em;
+}
+.confirmation-summary{
+  text-align:left;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:24px 26px;
+  margin:28px 0;
+}
+.confirmation-summary-row{
+  display:flex;
+  justify-content:space-between;
+  font-size:0.88rem;
+  color:var(--text-dim);
+  padding:8px 0;
+  border-bottom:1px solid var(--line);
+}
+.confirmation-summary-row:last-child{ border-bottom:none; }
+.confirmation-summary-row.total{
+  color:var(--text);
+  font-weight:700;
+  font-size:1rem;
+  padding-top:14px;
+  margin-top:6px;
+  border-top:1px solid var(--line);
+}
+.confirmation-empty{ color:var(--text-dim); padding:40px 0; }
+.confirmation-actions{
+  display:flex;
+  gap:16px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+
+/* ======================================================
+   PÁGINA DE DETALHE DE BUILD (build-*.html)
+   ====================================================== */
+.build-detail{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:56px;
+  align-items:start;
+}
+@media (max-width:800px){ .build-detail{ grid-template-columns:1fr; } }
+
+.build-gallery-main.img-placeholder{
+  height:360px;
+  margin-bottom:14px;
+}
+.build-gallery-thumbs{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:12px;
+}
+.build-gallery-thumbs .img-placeholder{
+  height:90px;
+  font-size:0.62rem;
+}
+
+.build-info .back-link{
+  display:inline-block;
+  margin-bottom:18px;
+  font-size:0.82rem;
+  color:var(--text-dim);
+  text-decoration:none;
+}
+.build-info .back-link:hover{ color:var(--clay); }
+.build-info h1{ font-size:clamp(1.8rem, 3.6vw, 2.6rem); margin-bottom:8px; }
+.build-info .tagline{ color:var(--moss); font-size:0.85rem; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:18px; display:block; }
+.build-info .description{ color:var(--text-dim); margin-bottom:24px; line-height:1.75; }
+.build-info .price{ font-size:1.4rem; margin:0 0 20px; }
+.build-info .add-to-cart-btn{ max-width:320px; }
+
+.build-full-specs{
+  list-style:none;
+  margin-top:32px;
+  border-top:1px solid var(--line);
+}
+.build-full-specs li{
+  display:flex;
+  justify-content:space-between;
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+  font-size:0.88rem;
+}
+.build-full-specs li b{ color:var(--text-dim); font-weight:500; }
+
+/* Link "Ver detalhes" nos cards de builds.html */
+.build-card .details-link{
+  display:inline-block;
+  margin-top:10px;
+  font-size:0.8rem;
+  color:var(--text-dim);
+  text-decoration:none;
+}
+.build-card .details-link:hover{ color:var(--clay); }
+
+/* ======================================================
+   DEPOIMENTOS (home)
+   ====================================================== */
+.testimonial-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:20px;
+}
+@media (max-width:800px){ .testimonial-grid{ grid-template-columns:1fr; } }
+.testimonial-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:28px;
+}
+.testimonial-stars{
+  color:var(--clay);
+  font-size:0.9rem;
+  letter-spacing:3px;
+  margin-bottom:16px;
+}
+.testimonial-quote{
+  color:var(--text);
+  font-style:italic;
+  line-height:1.65;
+  margin-bottom:18px;
+}
+.testimonial-author{ font-size:0.8rem; color:var(--text-dim); }
+.testimonial-author b{ color:var(--text); font-weight:600; }
+
+/* ======================================================
+   NEWSLETTER (rodapé, todas as páginas)
+   ====================================================== */
+.footer-newsletter{
+  margin-bottom:28px;
+  padding-bottom:28px;
+  border-bottom:1px solid var(--line);
+}
+.footer-newsletter p{
+  font-size:0.85rem;
+  color:var(--text-dim);
+  margin-bottom:12px;
+}
+.newsletter-form{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  max-width:420px;
+}
+.newsletter-form input{
+  flex:1;
+  min-width:180px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:5px;
+  padding:10px 12px;
+  color:var(--text);
+  font-family:'JetBrains Mono', monospace;
+  font-size:0.85rem;
+}
+.newsletter-form input:focus{
+  outline:2px solid var(--clay);
+  outline-offset:1px;
+  border-color:var(--clay);
+}
+.newsletter-form .btn{
+  padding:10px 20px;
+  font-size:0.8rem;
+}
+.newsletter-message{
+  font-size:0.78rem;
+  color:var(--moss);
+  margin-top:10px;
+  min-height:1.1em;
+}
+.newsletter-message.error{ color:#e0693f; }
+
+/* ======================================================
+   CONTATO DE SUPORTE (linha no rodapé + página suporte.html)
+   ====================================================== */
+.support-contact{
+  font-size:0.78rem;
+  color:var(--text-dim);
+  margin-top:10px;
+}
+.support-contact a{ color:var(--clay); text-decoration:underline; text-underline-offset:3px; }
+
+.support-info{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:20px;
+  margin-bottom:48px;
+}
+@media (max-width:700px){ .support-info{ grid-template-columns:1fr; } }
+.support-info-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:26px;
+}
+.support-info-card h3{ font-size:1.05rem; margin-bottom:8px; }
+.support-info-card p{ color:var(--text-dim); font-size:0.88rem; line-height:1.6; }
+.support-info-card a{ color:var(--clay); text-decoration:underline; text-underline-offset:3px; }
+
+.faq-item{
+  border-top:1px solid var(--line);
+  padding:20px 0;
+}
+.faq-item:last-child{ border-bottom:1px solid var(--line); }
+.faq-item h3{ font-size:0.98rem; margin-bottom:8px; }
+.faq-item p{ color:var(--text-dim); font-size:0.88rem; line-height:1.6; }
+
+/* ======================================================
+   "ESQUECI A SENHA" (login.html)
+   ====================================================== */
+.forgot-link{
+  display:inline-block;
+  margin-top:-6px;
+  margin-bottom:4px;
+  font-size:0.78rem;
+  color:var(--text-dim);
+  text-decoration:underline;
+  text-underline-offset:3px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:0;
+  text-align:left;
+}
+.forgot-link:hover{ color:var(--clay); }
+.forgot-panel{
+  margin-top:18px;
+  padding-top:18px;
+  border-top:1px solid var(--line);
+}
+.forgot-panel p{
+  font-size:0.8rem;
+  color:var(--text-dim);
+  margin-bottom:14px;
+  line-height:1.6;
+}

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrar — Thock</title>
+<meta name="description" content="Entre ou crie sua conta na Thock para acompanhar seus pedidos.">
+<meta name="theme-color" content="#0f1015">
+<!-- OPEN GRAPH — como o link aparece quando compartilhado no WhatsApp, Discord, redes sociais etc.
+     Troque og:image por uma imagem de verdade (1200x630px) quando tiver uma; por enquanto usa o ícone do site. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Thock">
+<meta property="og:title" content="Entrar — Thock">
+<meta property="og:description" content="Entre ou crie sua conta na Thock para acompanhar seus pedidos.">
+<meta property="og:image" content="apple-touch-icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- TRILHOS LATERAIS — decoração de fundo, só aparecem em telas largas.
+     Ficam vazios aqui; o rail.js preenche eles com os mini-teclados via JavaScript. -->
+<div class="side-rail left" aria-hidden="true"><div class="rail-track" id="railLeft"></div></div>
+<div class="side-rail right" aria-hidden="true"><div class="rail-track" id="railRight"></div></div>
+
+<header class="site-header">
+  <nav aria-label="Navegação principal">
+    <a class="logo" href="index.html">Thock<span>.</span></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navPanel">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-right" id="navPanel">
+      <ul class="nav-links">
+        <li><a href="switches.html">Switches</a></li>
+        <li><a href="sounds.html">Sons</a></li>
+        <li><a href="builds.html">Builds</a></li>
+      </ul>
+      <div class="nav-actions">
+        <!-- shop.js atualiza este link automaticamente pro nome de quem estiver logado -->
+        <a href="login.html" class="nav-account-link">Entrar</a>
+        <a href="cart.html" class="cart-link" aria-label="Ver carrinho">
+          🛒<span class="cart-count" id="cartCount" data-count="0">0</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login" type="button">Entrar</button>
+        <button class="auth-tab" data-tab="signup" type="button">Criar conta</button>
+      </div>
+
+      <!-- FORMULÁRIO DE LOGIN -->
+      <form class="auth-form" id="loginForm" novalidate>
+        <div class="form-group">
+          <label for="loginEmail">E-mail</label>
+          <input type="email" id="loginEmail" autocomplete="email" placeholder="voce@email.com">
+          <span class="field-error" id="loginEmailError"></span>
+        </div>
+        <div class="form-group">
+          <label for="loginSenha">Senha</label>
+          <div class="password-field">
+            <input type="password" id="loginSenha" autocomplete="current-password" placeholder="••••••••">
+            <button type="button" class="toggle-password" data-target="loginSenha" aria-label="Mostrar senha">mostrar</button>
+          </div>
+          <span class="field-error" id="loginSenhaError"></span>
+        </div>
+        <button type="button" class="forgot-link" id="forgotPasswordLink">Esqueci minha senha</button>
+        <button class="btn btn-primary auth-submit" type="submit">Entrar</button>
+      </form>
+
+      <!-- Painel "esqueci a senha" — escondido até clicar no link acima -->
+      <div class="forgot-panel" id="forgotPanel" hidden>
+        <p>Digite seu e-mail e enviaremos instruções pra redefinir a senha (demonstração — nenhum e-mail é enviado de verdade).</p>
+        <div class="form-group">
+          <label for="forgotEmail">E-mail</label>
+          <input type="email" id="forgotEmail" placeholder="voce@email.com">
+          <span class="field-error" id="forgotEmailError"></span>
+        </div>
+        <button class="btn btn-ghost" type="button" id="forgotSubmitBtn">Enviar instruções</button>
+        <p class="auth-success" id="forgotSuccessMsg" hidden>Se esse e-mail existir na nossa base, as instruções foram enviadas.</p>
+      </div>
+
+      <!-- FORMULÁRIO DE CADASTRO — escondido até a aba ser clicada -->
+      <form class="auth-form" id="signupForm" hidden novalidate>
+        <div class="form-group">
+          <label for="signupNome">Nome</label>
+          <input type="text" id="signupNome" autocomplete="name" placeholder="Seu nome">
+          <span class="field-error" id="signupNomeError"></span>
+        </div>
+        <div class="form-group">
+          <label for="signupEmail">E-mail</label>
+          <input type="email" id="signupEmail" autocomplete="email" placeholder="voce@email.com">
+          <span class="field-error" id="signupEmailError"></span>
+        </div>
+        <div class="form-group">
+          <label for="signupSenha">Senha</label>
+          <div class="password-field">
+            <input type="password" id="signupSenha" autocomplete="new-password" placeholder="mínimo 6 caracteres">
+            <button type="button" class="toggle-password" data-target="signupSenha" aria-label="Mostrar senha">mostrar</button>
+          </div>
+          <span class="field-error" id="signupSenhaError"></span>
+        </div>
+        <div class="form-group">
+          <label for="signupConfirmar">Confirmar senha</label>
+          <div class="password-field">
+            <input type="password" id="signupConfirmar" autocomplete="new-password" placeholder="repita a senha">
+            <button type="button" class="toggle-password" data-target="signupConfirmar" aria-label="Mostrar senha">mostrar</button>
+          </div>
+          <span class="field-error" id="signupConfirmarError"></span>
+        </div>
+        <button class="btn btn-primary auth-submit" type="submit">Criar conta</button>
+      </form>
+
+      <p class="auth-note">
+        Site fictício, feito como projeto de estudo — não use senhas reais.
+        Nenhum dado é enviado a um servidor; tudo fica salvo só no seu navegador.
+      </p>
+    </div>
+  </div>
+</main>
+
+<footer class="wrap">
+  <div class="footer-content">
+    <div class="footer-legal">
+      <p>2024–2026 Thock — Montagem de Teclados Mecânicos. Copyright. Todos os direitos reservados.
+         <a href="sobre.html">Sobre</a> — <a href="suporte.html">Suporte</a> — <a href="#">Política de Privacidade</a> — <a href="#">Termos e Condições</a></p>
+      <p class="support-contact">Dúvidas ou problemas? <a href="mailto:suporte@thock.build">suporte@thock.build</a> — resposta em até 2 dias úteis (demonstração).</p>
+      <p class="disclaimer">Este é um site fictício, feito como projeto de estudo — "Thock" não é uma marca registrada nem uma loja real. Nomes de switches citados aqui (Red, Brown, Blue etc.) pertencem aos seus respectivos fabricantes.</p>
+    </div>
+    <div class="footer-newsletter">
+      <p>Não perca as próximas builds</p>
+      <form id="newsletterForm" class="newsletter-form" novalidate>
+        <input type="email" id="newsletterEmail" placeholder="seu@email.com">
+        <button class="btn btn-primary" type="submit">Inscrever</button>
+      </form>
+      <p class="newsletter-message" id="newsletterMessage"></p>
+    </div>
+    <div class="footer-bottom-row">
+      <span class="footer-handle">@thock.build</span>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram do Thock">IG</a>
+        <a href="#" aria-label="YouTube do Thock">YT</a>
+        <a href="#" aria-label="Discord da comunidade Thock">DC</a>
+        <a href="#" aria-label="Reddit r/thockbuilds">RD</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="shop.js"></script>
+<script src="auth.js"></script>
+<script src="rail.js"></script>
+
+</body>
+</html>
